@@ -7,7 +7,7 @@ packaged for current Haiku systems.
 
 | Add-on | Description | Version |
 | --- | --- | ---: |
-| [CopyNameToClipboard](CopyNameToClipboard/) | Copies the paths or names of selected Tracker items to the system clipboard. | 1.1.0 |
+| [CopyNameToClipboard](CopyNameToClipboard/) | Copies the paths or names of selected Tracker items to the system clipboard. | 1.2.0 |
 
 ## Building from source
 

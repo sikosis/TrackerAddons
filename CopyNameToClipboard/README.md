@@ -13,6 +13,7 @@ Select one or more items in Tracker and choose **Copy name to clipboard** from
 the add-ons menu.
 
 - By default, complete paths are copied and separated by spaces.
+- With no item selected, the current Tracker folder's path is copied.
 - Hold **Shift** while choosing the add-on to copy names without paths.
 - Hold **Control** to place each item on a separate line.
 - Paths containing spaces are enclosed in double quotation marks.
@@ -40,9 +41,9 @@ Install an unpackaged development copy:
 make -C src install
 ```
 
-This installs `Copy name to clipboard-C` in the current user's non-packaged
-Tracker add-ons directory. The final `C` sets the default Tracker shortcut.
-Rename that suffix to choose a different shortcut letter.
+This installs `Copy name to clipboard` in the current user's non-packaged
+Tracker add-ons directory. Its Option+Alt+C shortcut is defined in the add-on's
+resources and does not form part of the displayed name.
 
 ## Packaging
 
@@ -53,10 +54,10 @@ Create an installable package on Haiku:
 ```
 
 The script runs the portable tests, performs a clean native build and creates
-`dist/copynametoclipboard-1.1.0-1-<architecture>.hpkg`.
+`dist/copynametoclipboard-1.2.0-1-<architecture>.hpkg`.
 
 ## Version and licence
 
-- Version: 1.1.0
+- Version: 1.2.0
 - Original version: 1.0.1
 - Licence: MIT

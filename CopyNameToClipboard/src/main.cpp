@@ -22,7 +22,6 @@
 extern "C" void process_refs(entry_ref directoryReference, BMessage* message,
 	void* reserved)
 {
-	(void)directoryReference;
 	(void)reserved;
 
 	if (message == NULL)
@@ -38,25 +37,29 @@ extern "C" void process_refs(entry_ref directoryReference, BMessage* message,
 			paths.push_back(path.Path());
 	}
 
-	if (paths.empty())
-		return;
+	if (paths.empty()) {
+		BEntry directory(&directoryReference, true);
+		BPath path;
+		if (directory.InitCheck() != B_OK || directory.GetPath(&path) != B_OK)
+			return;
+		paths.push_back(path.Path());
+	}
 
 	const uint32 keys = modifiers();
 	const std::string text = FormatClipboardText(paths,
 		(keys & B_SHIFT_KEY) != 0, (keys & B_CONTROL_KEY) != 0);
 
-	BClipboard clipboard("system");
-	if (!clipboard.Lock())
+	if (!be_clipboard->Lock())
 		return;
 
-	clipboard.Clear();
-	BMessage* data = clipboard.Data();
+	be_clipboard->Clear();
+	BMessage* data = be_clipboard->Data();
 	if (data != NULL
 		&& data->AddData("text/plain", B_MIME_TYPE, text.c_str(),
-			text.size() + 1) == B_OK) {
-		clipboard.Commit();
+			text.size()) == B_OK) {
+		be_clipboard->Commit();
 	}
-	clipboard.Unlock();
+	be_clipboard->Unlock();
 }
 //---------------------------------------------------------------------------------------------------------------------------------//
 

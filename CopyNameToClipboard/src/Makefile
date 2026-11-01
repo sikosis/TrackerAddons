@@ -27,7 +27,7 @@ DRIVER_PATH =
 
 TRACKER_ADDONS_DIR = \
 	$(shell finddir B_USER_NONPACKAGED_ADDONS_DIRECTORY)/Tracker
-TRACKER_ADDON_NAME = Copy name to clipboard-C
+TRACKER_ADDON_NAME = Copy name to clipboard
 INSTALL_DIR = $(TRACKER_ADDONS_DIR)
 
 DEVEL_DIRECTORY := \
@@ -37,5 +37,6 @@ include $(DEVEL_DIRECTORY)/etc/makefile-engine
 .PHONY: install
 
 install:: $(TARGET)
+	rm -f "$(INSTALL_DIR)/Copy name to clipboard-C"
 	mv -f "$(INSTALL_DIR)/$(NAME)" \
 		"$(INSTALL_DIR)/$(TRACKER_ADDON_NAME)"
