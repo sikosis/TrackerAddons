@@ -65,7 +65,11 @@ sed \
 	"$template" > "$staging_directory/.PackageInfo"
 
 package create -C "$staging_directory" "$output"
-package list -i "$output"
+
+if [ ! -s "$output" ]; then
+	echo "Error: package creation did not produce $output." >&2
+	exit 1
+fi
 
 echo
 echo "Created $output"

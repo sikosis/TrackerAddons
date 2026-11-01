@@ -37,17 +37,16 @@ make -C src
 Install an unpackaged development copy:
 
 ```sh
-mkdir -p /boot/home/config/non-packaged/add-ons/Tracker
-copyattr --data src/CopyNameToClipboard \
-  "/boot/home/config/non-packaged/add-ons/Tracker/Copy name to clipboard-C"
+make -C src install
 ```
 
-The final `C` sets the default Tracker shortcut. Rename that suffix to choose a
-different shortcut letter.
+This installs `Copy name to clipboard-C` in the current user's non-packaged
+Tracker add-ons directory. The final `C` sets the default Tracker shortcut.
+Rename that suffix to choose a different shortcut letter.
 
 ## Packaging
 
-Create and verify an installable package on Haiku:
+Create an installable package on Haiku:
 
 ```sh
 ./build-package.sh

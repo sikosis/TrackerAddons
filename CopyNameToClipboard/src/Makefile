@@ -25,6 +25,17 @@ LINKER_FLAGS =
 APP_VERSION =
 DRIVER_PATH =
 
+TRACKER_ADDONS_DIR = \
+	$(shell finddir B_USER_NONPACKAGED_ADDONS_DIRECTORY)/Tracker
+TRACKER_ADDON_NAME = Copy name to clipboard-C
+INSTALL_DIR = $(TRACKER_ADDONS_DIR)
+
 DEVEL_DIRECTORY := \
 	$(shell findpaths -r "makefile_engine" B_FIND_PATH_DEVELOP_DIRECTORY)
 include $(DEVEL_DIRECTORY)/etc/makefile-engine
+
+.PHONY: install
+
+install:: $(TARGET)
+	mv -f "$(INSTALL_DIR)/$(NAME)" \
+		"$(INSTALL_DIR)/$(TRACKER_ADDON_NAME)"
