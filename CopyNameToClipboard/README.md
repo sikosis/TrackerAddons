@@ -1,6 +1,6 @@
-# Copy name to clipboard
+# Copy Name to Clipboard
 
-Copy name to clipboard is a native Haiku Tracker add-on that copies the paths
+Copy Name to Clipboard is a native Haiku Tracker add-on that copies the paths
 of selected files and folders to the system clipboard.
 
 This maintained port is based on version 1.0.1 by Werner Freytag and Humdinger.
@@ -9,7 +9,7 @@ the source, build and packaging for current Haiku systems.
 
 ## Usage
 
-Select one or more items in Tracker and choose **Copy name to clipboard** from
+Select one or more items in Tracker and choose **Copy Name to Clipboard** from
 the add-ons menu.
 
 - By default, complete paths are copied and separated by spaces.
@@ -41,7 +41,7 @@ Install an unpackaged development copy:
 make -C src install
 ```
 
-This installs `Copy name to clipboard` in the current user's non-packaged
+This installs `Copy Name to Clipboard` in the current user's non-packaged
 Tracker add-ons directory. Its Option+Alt+C shortcut is defined in the add-on's
 resources and does not form part of the displayed name.
 
@@ -54,10 +54,10 @@ Create an installable package on Haiku:
 ```
 
 The script runs the portable tests, performs a clean native build and creates
-`dist/copynametoclipboard-1.2.0-1-<architecture>.hpkg`.
+`dist/copynametoclipboard-1.2.1-1-<architecture>.hpkg`.
 
 ## Version and licence
 
-- Version: 1.2.0
+- Version: 1.2.1
 - Original version: 1.0.1
 - Licence: MIT

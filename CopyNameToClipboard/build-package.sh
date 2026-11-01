@@ -2,7 +2,7 @@
 
 set -eu
 
-version="1.2.0"
+version="1.2.1"
 revision="1"
 
 project_directory=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
@@ -52,7 +52,7 @@ mkdir -p "$staging_directory/documentation/packages/copynametoclipboard"
 mkdir -p "$output_directory"
 
 copyattr --data "$binary" \
-	"$staging_directory/add-ons/Tracker/Copy name to clipboard"
+	"$staging_directory/add-ons/Tracker/Copy Name to Clipboard"
 cp "$project_directory/README.md" \
 	"$staging_directory/documentation/packages/copynametoclipboard/README.md"
 cp "$project_directory/LICENSE" \
