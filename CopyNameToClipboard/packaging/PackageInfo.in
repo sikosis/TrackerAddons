@@ -1,0 +1,25 @@
+name copynametoclipboard
+version @VERSION@-@REVISION@
+architecture @ARCHITECTURE@
+
+summary "Copy selected Tracker paths to the clipboard"
+description "Copy name to clipboard is a Tracker add-on that copies selected file and folder paths, or names only, to the system clipboard."
+vendor "CopyNameToClipboard contributors"
+packager "CopyNameToClipboard contributors"
+
+copyrights {
+	"2000-2012 Werner Freytag and Humdinger"
+	"2026 CopyNameToClipboard contributors"
+}
+
+licenses {
+	"MIT"
+}
+
+provides {
+	copynametoclipboard = @VERSION@
+}
+
+requires {
+	haiku
+}

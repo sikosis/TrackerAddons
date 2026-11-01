@@ -1,1 +1,5 @@
 update-git.sh
+CopyNameToClipboard/dist/
+CopyNameToClipboard/src/CopyNameToClipboard
+CopyNameToClipboard/src/objects.*
+CopyNameToClipboard/tests/ClipboardTextTest
