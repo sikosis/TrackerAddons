@@ -1,0 +1,25 @@
+name mp3tag
+version @VERSION@-@REVISION@
+architecture @ARCHITECTURE@
+
+summary "Edit ID3v1 tags from Tracker"
+description "MP3 Tag is a native Tracker add-on for viewing and editing ID3v1 metadata in one or several MP3 files."
+vendor "mp3tag maintainers"
+packager "mp3tag maintainers"
+
+copyrights {
+	"1999 Arvid Norberg"
+	"2026 mp3tag maintainers"
+}
+
+licenses {
+	"Copyrighted"
+}
+
+provides {
+	mp3tag = @VERSION@
+}
+
+requires {
+	haiku
+}

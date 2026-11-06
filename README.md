@@ -8,6 +8,7 @@ packaged for current Haiku systems.
 | Add-on | Description | Version |
 | --- | --- | ---: |
 | [CopyNameToClipboard](CopyNameToClipboard/) | Copies the paths or names of selected Tracker items to the system clipboard. | 1.2.1 |
+| [mp3tag](mp3tag/) | Views and edits ID3v1 tags in one or several MP3 files. | 1.0.0 |
 
 ## Building from source
 
@@ -31,6 +32,9 @@ CopyNameToClipboard/build-package.sh
 - `CopyNameToClipboard` contains the maintained add-on.
 - `CopyNameToClipboard-Original` preserves the 2012 source for reference and
   is not a separate release.
+- `mp3tag` contains the maintained MP3 tag editor.
+- `mp3tag-Original` preserves the 1999 source for reference and is not a
+  separate release.
 
 ## Licences
 

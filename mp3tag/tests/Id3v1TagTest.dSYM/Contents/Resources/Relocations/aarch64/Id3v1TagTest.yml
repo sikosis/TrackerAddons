@@ -1,0 +1,5 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     Id3v1TagTest
+relocations:     []
+...

@@ -1,0 +1,13 @@
+resource app_signature "application/x-vnd.Haiku-MP3Tag";
+
+resource app_flags B_SINGLE_LAUNCH;
+
+resource app_version {
+	major = 1,
+	middle = 0,
+	minor = 0,
+	variety = 5,
+	internal = 0,
+	short_info = "Edit ID3v1 tags from Tracker",
+	long_info = "Tracker add-on for editing ID3v1 tags in one or more MP3 files"
+};

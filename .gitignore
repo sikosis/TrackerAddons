@@ -3,3 +3,8 @@ CopyNameToClipboard/dist/
 CopyNameToClipboard/src/CopyNameToClipboard
 CopyNameToClipboard/src/objects.*
 CopyNameToClipboard/tests/ClipboardTextTest
+mp3tag/dist/
+mp3tag/src/mp3tag
+mp3tag/src/objects.*
+mp3tag/tests/Id3v1TagTest
+mp3tag/tests/PatternMatcherTest
