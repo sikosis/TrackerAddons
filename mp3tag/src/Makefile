@@ -20,7 +20,8 @@ DEFINES =
 WARNINGS = ALL
 SYMBOLS =
 DEBUGGER =
-COMPILER_FLAGS = -std=c++17
+COMPILER_FLAGS =
+CXXFLAGS += -std=c++17
 LINKER_FLAGS =
 APP_VERSION =
 DRIVER_PATH =
@@ -38,6 +39,5 @@ include $(DEVEL_DIRECTORY)/etc/makefile-engine
 
 install:: $(TARGET)
 	rm -f "$(INSTALL_DIR)/mp3tags"
-	rm -f "$(INSTALL_DIR)/mp3tag"
 	mv -f "$(INSTALL_DIR)/$(NAME)" \
 		"$(INSTALL_DIR)/$(TRACKER_ADDON_NAME)"
