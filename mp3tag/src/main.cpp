@@ -4,8 +4,8 @@
  */
 
 #include "EditorWindows.h"
-#include "Id3v1Tag.h"
 #include "PatternMatcher.h"
+#include "TagLibTag.h"
 
 #include <algorithm>
 #include <cctype>
@@ -66,7 +66,7 @@ bool LoadReference(const entry_ref& reference, BPath& path, TagData& data,
 		error = std::string(path.Leaf()) + " is not an MP3 file.";
 		return false;
 	}
-	Id3v1Tag tag(path.Path());
+	TagLibTag tag(path.Path());
 	return tag.Load(data, error);
 }
 //---------------------------------------------------------------------------------------------------------------------------------//
@@ -75,9 +75,8 @@ bool LoadReference(const entry_ref& reference, BPath& path, TagData& data,
 bool SaveReference(const entry_ref& reference, const BPath& path,
 	const TagData& data, std::string& error)
 {
-	Id3v1Tag tag(path.Path());
-	TagData ignored;
-	if (!tag.Load(ignored, error) || !tag.Save(data, error))
+	TagLibTag tag(path.Path());
+	if (!tag.Save(data, error))
 		return false;
 	SetMp3MimeType(reference);
 	return true;

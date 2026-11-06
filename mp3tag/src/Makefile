@@ -5,11 +5,17 @@ TARGET_DIR = .
 TYPE = APP
 APP_MIME_SIG = application/x-vnd.Haiku-MP3Tag
 
-SRCS = main.cpp EditorWindows.cpp Genres.cpp Id3v1Tag.cpp PatternMatcher.cpp
+TAGLIB_CONFIG := $(shell command -v taglib-config 2>/dev/null)
+ifeq ($(TAGLIB_CONFIG),)
+$(error TagLib development files are missing. Run: pkgman install taglib_devel)
+endif
+
+SRCS = main.cpp EditorWindows.cpp Genres.cpp Id3v1Tag.cpp PatternMatcher.cpp \
+	TagLibTag.cpp
 RDEFS = mp3tag.rdef
 RSRCS =
 
-LIBS = be tracker $(STDCPPLIBS)
+LIBS = be tag tracker $(STDCPPLIBS)
 LIBPATHS =
 SYSTEM_INCLUDE_PATHS =
 LOCAL_INCLUDE_PATHS =
@@ -21,7 +27,7 @@ WARNINGS = ALL
 SYMBOLS =
 DEBUGGER =
 COMPILER_FLAGS =
-CXXFLAGS += -std=c++17
+CXXFLAGS += -std=c++17 $(shell $(TAGLIB_CONFIG) --cflags)
 LINKER_FLAGS =
 APP_VERSION =
 DRIVER_PATH =
