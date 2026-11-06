@@ -25,8 +25,9 @@ The rename section provides presets for `{artist} - {title}.mp3`,
 `{track} - {artist} - {title}.mp3` and
 `{artist} - {track} - {title}.mp3`. Choose **Custom** to edit the pattern.
 Available wildcards are `{track}`, `{artist}`, `{title}`, `{album}` and
-`{year}`. **Rename File** updates the filename without closing the editor;
-only **Save** and **Cancel** close the window.
+`{year}`. Track numbers 1–9 are formatted as `01`–`09`. **Rename File**
+updates the filename without closing the editor; only **Save** and **Cancel**
+close the window.
 
 The default pattern `/a - /t.mp3` reads filenames such as
 `Artist - Song title.mp3`.
@@ -63,11 +64,11 @@ Create an installable HPKG on Haiku:
 ./build-package.sh
 ```
 
-The output is `dist/mp3tag-1.3.1-1-<architecture>.hpkg`.
+The output is `dist/mp3tag-1.3.2-1-<architecture>.hpkg`.
 
 ## Version and copyright
 
-- Version: 1.3.1
+- Version: 1.3.2
 - Original author: Arvid Norberg
 - Copyright status: the original source did not include a software licence;
   see `COPYRIGHT` before redistributing it

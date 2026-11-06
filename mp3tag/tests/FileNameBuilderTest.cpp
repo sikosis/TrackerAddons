@@ -34,12 +34,17 @@ int main()
 	data.track = 4;
 	Expect(BuildTagFileName(data, kTrackArtistTitlePattern,
 		filename, error), "track number pattern");
-	Expect(filename == "4 - Harris Heller - Heart Piece.mp3",
+	Expect(filename == "04 - Harris Heller - Heart Piece.mp3",
 		"filename with track number");
 	Expect(BuildTagFileName(data, kArtistTrackTitlePattern,
 		filename, error), "artist track title pattern");
-	Expect(filename == "Harris Heller - 4 - Heart Piece.mp3",
+	Expect(filename == "Harris Heller - 04 - Heart Piece.mp3",
 		"artist track title filename");
+	data.track = 10;
+	Expect(BuildTagFileName(data, kTrackArtistTitlePattern,
+		filename, error), "two digit track number");
+	Expect(filename == "10 - Harris Heller - Heart Piece.mp3",
+		"two digit track unchanged");
 
 	data.artist = "  Artist/Name  ";
 	data.title = " Track\\Name ";

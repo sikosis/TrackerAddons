@@ -7,7 +7,7 @@ resource(101, "BEOS:ICON") #'VICN' import "mp3tag.hvif";
 resource app_version {
 	major = 1,
 	middle = 3,
-	minor = 1,
+	minor = 2,
 	variety = 5,
 	internal = 0,
 	short_info = "Edit MP3 tags from Tracker",

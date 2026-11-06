@@ -2,7 +2,7 @@
 
 set -eu
 
-version="1.3.1"
+version="1.3.2"
 revision="1"
 
 project_directory=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)

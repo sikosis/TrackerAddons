@@ -30,8 +30,14 @@ std::string SanitiseComponent(const std::string& value)
 bool ResolveWildcard(const TagData& data, const std::string& wildcard,
 	std::string& value)
 {
-	if (wildcard == "track")
-		value = data.track == 0 ? std::string() : std::to_string(data.track);
+	if (wildcard == "track") {
+		if (data.track == 0)
+			value.clear();
+		else if (data.track < 10)
+			value = "0" + std::to_string(data.track);
+		else
+			value = std::to_string(data.track);
+	}
 	else if (wildcard == "artist")
 		value = data.artist;
 	else if (wildcard == "title")
