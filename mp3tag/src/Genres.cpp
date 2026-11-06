@@ -1,5 +1,8 @@
 #include "Genres.h"
 
+#include <algorithm>
+#include <cctype>
+
 
 const char* const kGenreNames[] = {
 	"Blues", "Classic Rock", "Country", "Dance", "Disco", "Funk",
@@ -28,3 +31,39 @@ const char* const kGenreNames[] = {
 
 
 const std::size_t kGenreCount = sizeof(kGenreNames) / sizeof(kGenreNames[0]);
+
+
+const char* GenreName(std::uint16_t index)
+{
+	return index < kGenreCount ? kGenreNames[index] : "Unknown";
+}
+//---------------------------------------------------------------------------------------------------------------------------------//
+
+
+std::vector<std::uint16_t> SortedGenreIndices()
+{
+	std::vector<std::uint16_t> indices;
+	indices.reserve(kGenreCount + 1);
+	for (std::size_t index = 0; index < kGenreCount; ++index)
+		indices.push_back(static_cast<std::uint16_t>(index));
+	indices.push_back(255);
+
+	std::sort(indices.begin(), indices.end(), [](std::uint16_t left,
+		std::uint16_t right) {
+		const unsigned char* leftName
+			= reinterpret_cast<const unsigned char*>(GenreName(left));
+		const unsigned char* rightName
+			= reinterpret_cast<const unsigned char*>(GenreName(right));
+		while (*leftName != '\0' && *rightName != '\0') {
+			const int leftCharacter = std::tolower(*leftName);
+			const int rightCharacter = std::tolower(*rightName);
+			if (leftCharacter != rightCharacter)
+				return leftCharacter < rightCharacter;
+			++leftName;
+			++rightName;
+		}
+		return *leftName < *rightName;
+	});
+	return indices;
+}
+//---------------------------------------------------------------------------------------------------------------------------------//

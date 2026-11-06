@@ -9,10 +9,12 @@
 #include <Alert.h>
 #include <Button.h>
 #include <CheckBox.h>
+#include <Entry.h>
 #include <LayoutBuilder.h>
 #include <MenuField.h>
 #include <MenuItem.h>
 #include <PopUpMenu.h>
+#include <RadioButton.h>
 #include <StringView.h>
 #include <TextControl.h>
 #include <Window.h>
@@ -23,6 +25,10 @@ namespace {
 
 const uint32 kSave = 'save';
 const uint32 kRename = 'renm';
+const uint32 kRenameArtistTitle = 'rnar';
+const uint32 kRenameTrackArtistTitle = 'rnta';
+const uint32 kRenameArtistTrackTitle = 'rart';
+const uint32 kRenameCustom = 'rncu';
 const uint32 kCancel = 'cncl';
 const uint32 kGenre = 'genr';
 
@@ -30,22 +36,16 @@ const uint32 kGenre = 'genr';
 BMenuField* CreateGenreField(std::uint8_t selected, int32& selectedGenre)
 {
 	BPopUpMenu* menu = new BPopUpMenu("genre");
-	for (std::size_t index = 0; index < kGenreCount; ++index) {
+	for (std::uint16_t index : SortedGenreIndices()) {
 		BMessage* message = new BMessage(kGenre);
 		message->AddInt32("index", static_cast<int32>(index));
-		BMenuItem* item = new BMenuItem(kGenreNames[index], message);
+		BMenuItem* item = new BMenuItem(GenreName(index), message);
 		menu->AddItem(item);
 		if (index == selected)
 			item->SetMarked(true);
 	}
-	BMessage* unknownMessage = new BMessage(kGenre);
-	unknownMessage->AddInt32("index", 255);
-	BMenuItem* unknown = new BMenuItem("Unknown", unknownMessage);
-	menu->AddItem(unknown);
-	if (selected >= kGenreCount) {
-		unknown->SetMarked(true);
+	if (selected >= kGenreCount)
 		selectedGenre = 255;
-	}
 	return new BMenuField("Genre:", menu);
 }
 //---------------------------------------------------------------------------------------------------------------------------------//
@@ -66,15 +66,14 @@ std::uint32_t ParseTrackNumber(const char* value)
 
 class SingleEditorWindow : public BWindow {
 public:
-	SingleEditorWindow(const char* filename, TagData* data, bool* accepted,
-		bool* renameFile, bool* includeTrackNumber)
+	SingleEditorWindow(const char* filename, BPath* path, TagData* data,
+		bool* accepted)
 		:
 		BWindow(BRect(100, 100, 560, 390), "MP3 Tag", B_TITLED_WINDOW,
 			B_NOT_ZOOMABLE | B_AUTO_UPDATE_SIZE_LIMITS),
 		fData(data),
 		fAccepted(accepted),
-		fRenameFile(renameFile),
-		fIncludeTrackNumberResult(includeTrackNumber),
+		fPath(path),
 		fSelectedGenre(data->genre)
 	{
 		fTitle = new BTextControl("Title:", data->title.c_str(), NULL);
@@ -84,13 +83,21 @@ public:
 		fComment = new BTextControl("Comment:", data->comment.c_str(), NULL);
 		fTrack = new BTextControl("Track:",
 			data->track == 0 ? "" : std::to_string(data->track).c_str(), NULL);
-		fIncludeTrackNumber = new BCheckBox("Include track number", NULL);
+		fRenamePattern = new BTextControl("Rename pattern:",
+			kDefaultRenamePattern, NULL);
+		fRenamePattern->SetToolTip(
+			"Wildcards: {track}, {artist}, {title}, {album}, {year}");
+		fRenamePattern->SetEnabled(false);
+		BRadioButton* artistTitle = new BRadioButton("Artist - Title",
+			new BMessage(kRenameArtistTitle));
+		artistTitle->SetValue(B_CONTROL_ON);
 
 		BButton* save = new BButton("Save", new BMessage(kSave));
 		BButton* rename = new BButton("Rename File", new BMessage(kRename));
+		fFilename = new BStringView("filename", filename);
 		BLayoutBuilder::Group<>(this, B_VERTICAL)
 			.SetInsets(B_USE_WINDOW_SPACING)
-			.Add(new BStringView("filename", filename))
+			.Add(fFilename)
 			.AddGrid(B_USE_DEFAULT_SPACING, B_USE_DEFAULT_SPACING)
 				.Add(fTitle->CreateLabelLayoutItem(), 0, 0)
 				.Add(fTitle->CreateTextViewLayoutItem(), 1, 0)
@@ -106,9 +113,19 @@ public:
 				.Add(fTrack->CreateTextViewLayoutItem(), 1, 5)
 				.Add(CreateGenreField(data->genre, fSelectedGenre), 0, 6, 2)
 			.End()
+			.Add(new BStringView("renameFormat", "Rename format:"))
+			.AddGrid(B_USE_DEFAULT_SPACING, B_USE_DEFAULT_SPACING)
+				.Add(artistTitle, 0, 0)
+				.Add(new BRadioButton("Track - Artist - Title",
+					new BMessage(kRenameTrackArtistTitle)), 1, 0)
+				.Add(new BRadioButton("Artist - Track - Title",
+					new BMessage(kRenameArtistTrackTitle)), 0, 1)
+				.Add(new BRadioButton("Custom",
+					new BMessage(kRenameCustom)), 1, 1)
+			.End()
+			.Add(fRenamePattern)
 			.AddGroup(B_HORIZONTAL)
 				.Add(rename)
-				.Add(fIncludeTrackNumber)
 				.AddGlue()
 				.Add(new BButton("Cancel", new BMessage(kCancel)))
 				.Add(save)
@@ -129,19 +146,48 @@ public:
 				_StoreFields();
 				std::string filename;
 				std::string error;
-				const bool includeTrackNumber
-					= fIncludeTrackNumber->Value() == B_CONTROL_ON;
-				if (!BuildTagFileName(*fData, includeTrackNumber, filename, error)) {
+				const std::string pattern = fRenamePattern->Text();
+				if (!BuildTagFileName(*fData, pattern, filename, error)) {
 					(new BAlert("MP3 Tag", error.c_str(), "OK", NULL, NULL,
 						B_WIDTH_AS_USUAL, B_WARNING_ALERT))->Go();
 					break;
 				}
-				*fRenameFile = true;
-				*fIncludeTrackNumberResult = includeTrackNumber;
-				*fAccepted = true;
-				Quit();
+				if (std::string(fPath->Leaf()) == filename) {
+					fFilename->SetText(filename.c_str());
+					break;
+				}
+				BEntry entry(fPath->Path(), true);
+				if (entry.InitCheck() != B_OK) {
+					(new BAlert("MP3 Tag", "Could not access the MP3 file for renaming.",
+						"OK", NULL, NULL, B_WIDTH_AS_USUAL, B_STOP_ALERT))->Go();
+					break;
+				}
+				const status_t status = entry.Rename(filename.c_str(), false);
+				if (status != B_OK) {
+					error = "Could not rename the file (error "
+						+ std::to_string(status) + ").";
+					(new BAlert("MP3 Tag", error.c_str(), "OK", NULL, NULL,
+						B_WIDTH_AS_USUAL, B_STOP_ALERT))->Go();
+					break;
+				}
+				BPath renamedPath;
+				if (entry.GetPath(&renamedPath) == B_OK)
+					fPath->SetTo(renamedPath.Path());
+				fFilename->SetText(filename.c_str());
 				break;
 			}
+			case kRenameArtistTitle:
+				_SelectRenamePattern(kDefaultRenamePattern, false);
+				break;
+			case kRenameTrackArtistTitle:
+				_SelectRenamePattern(kTrackArtistTitlePattern, false);
+				break;
+			case kRenameArtistTrackTitle:
+				_SelectRenamePattern(kArtistTrackTitlePattern, false);
+				break;
+			case kRenameCustom:
+				_SelectRenamePattern(NULL, true);
+				break;
 			case kCancel:
 				Quit();
 				break;
@@ -156,6 +202,17 @@ public:
 
 
 private:
+	void _SelectRenamePattern(const char* pattern, bool custom)
+	{
+		if (pattern != NULL)
+			fRenamePattern->SetText(pattern);
+		fRenamePattern->SetEnabled(custom);
+		if (custom)
+			fRenamePattern->MakeFocus(true);
+	}
+//---------------------------------------------------------------------------------------------------------------------------------//
+
+
 	void _StoreFields()
 	{
 		fData->title = fTitle->Text();
@@ -171,8 +228,7 @@ private:
 
 	TagData* fData;
 	bool* fAccepted;
-	bool* fRenameFile;
-	bool* fIncludeTrackNumberResult;
+	BPath* fPath;
 	int32 fSelectedGenre;
 	BTextControl* fTitle;
 	BTextControl* fArtist;
@@ -180,7 +236,8 @@ private:
 	BTextControl* fYear;
 	BTextControl* fComment;
 	BTextControl* fTrack;
-	BCheckBox* fIncludeTrackNumber;
+	BTextControl* fRenamePattern;
+	BStringView* fFilename;
 };
 
 
@@ -297,14 +354,11 @@ private:
 } // namespace
 
 
-bool EditSingleTag(const char* filename, TagData& data, bool& renameFile,
-	bool& includeTrackNumber)
+bool EditSingleTag(BPath& path, TagData& data)
 {
 	bool accepted = false;
-	renameFile = false;
-	includeTrackNumber = false;
-	SingleEditorWindow* window = new SingleEditorWindow(filename, &data, &accepted,
-		&renameFile, &includeTrackNumber);
+	SingleEditorWindow* window = new SingleEditorWindow(path.Leaf(), &path,
+		&data, &accepted);
 	window->Show();
 	const thread_id thread = window->Thread();
 	status_t result;

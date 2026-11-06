@@ -8,7 +8,7 @@ packaged for current Haiku systems.
 | Add-on | Description | Version |
 | --- | --- | ---: |
 | [CopyNameToClipboard](CopyNameToClipboard/) | Copies the paths or names of selected Tracker items to the system clipboard. | 1.2.1 |
-| [mp3tag](mp3tag/) | Views and edits ID3v1 and ID3v2 tags in one or several MP3 files. | 1.2.0 |
+| [mp3tag](mp3tag/) | Views and edits ID3v1 and ID3v2 tags in one or several MP3 files. | 1.3.1 |
 
 ## Building from source
 

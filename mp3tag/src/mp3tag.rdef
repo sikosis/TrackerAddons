@@ -2,10 +2,12 @@ resource app_signature "application/x-vnd.Haiku-MP3Tag";
 
 resource app_flags B_SINGLE_LAUNCH;
 
+resource(101, "BEOS:ICON") #'VICN' import "mp3tag.hvif";
+
 resource app_version {
 	major = 1,
-	middle = 2,
-	minor = 0,
+	middle = 3,
+	minor = 1,
 	variety = 5,
 	internal = 0,
 	short_info = "Edit MP3 tags from Tracker",

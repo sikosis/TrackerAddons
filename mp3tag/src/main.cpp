@@ -4,7 +4,6 @@
  */
 
 #include "EditorWindows.h"
-#include "FileNameBuilder.h"
 #include "PatternMatcher.h"
 #include "TagLibTag.h"
 
@@ -44,9 +43,9 @@ void ShowError(const std::string& message)
 //---------------------------------------------------------------------------------------------------------------------------------//
 
 
-void SetMp3MimeType(const entry_ref& reference)
+void SetMp3MimeType(const BPath& path)
 {
-	BNode node(&reference);
+	BNode node(path.Path());
 	if (node.InitCheck() != B_OK)
 		return;
 	BNodeInfo info(&node);
@@ -73,36 +72,12 @@ bool LoadReference(const entry_ref& reference, BPath& path, TagData& data,
 //---------------------------------------------------------------------------------------------------------------------------------//
 
 
-bool SaveReference(const entry_ref& reference, const BPath& path,
-	const TagData& data, std::string& error)
+bool SaveReference(const BPath& path, const TagData& data, std::string& error)
 {
 	TagLibTag tag(path.Path());
 	if (!tag.Save(data, error))
 		return false;
-	SetMp3MimeType(reference);
-	return true;
-}
-//---------------------------------------------------------------------------------------------------------------------------------//
-
-
-bool RenameReference(const entry_ref& reference, const TagData& data,
-	bool includeTrackNumber, std::string& error)
-{
-	std::string filename;
-	if (!BuildTagFileName(data, includeTrackNumber, filename, error))
-		return false;
-
-	BEntry entry(&reference, true);
-	if (entry.InitCheck() != B_OK) {
-		error = "Could not access the MP3 file for renaming.";
-		return false;
-	}
-	const status_t status = entry.Rename(filename.c_str(), false);
-	if (status != B_OK) {
-		error = "Could not rename the file (error "
-			+ std::to_string(status) + ").";
-		return false;
-	}
+	SetMp3MimeType(path);
 	return true;
 }
 //---------------------------------------------------------------------------------------------------------------------------------//
@@ -174,16 +149,9 @@ extern "C" void process_refs(entry_ref directoryReference, BMessage* message,
 			ShowError(error);
 			return;
 		}
-		bool renameFile = false;
-		bool includeTrackNumber = false;
-		if (!EditSingleTag(path.Leaf(), data, renameFile, includeTrackNumber))
+		if (!EditSingleTag(path, data))
 			return;
-		if (!SaveReference(references[0], path, data, error)) {
-			ShowError(error);
-			return;
-		}
-		if (renameFile
-			&& !RenameReference(references[0], data, includeTrackNumber, error)) {
+		if (!SaveReference(path, data, error)) {
 			ShowError(error);
 		}
 		return;
@@ -213,7 +181,7 @@ extern "C" void process_refs(entry_ref directoryReference, BMessage* message,
 			ApplyPattern(pattern, data);
 		}
 		ApplyBatchFields(options, data);
-		if (!SaveReference(item, path, data, error))
+		if (!SaveReference(path, data, error))
 			errors.push_back(std::string(path.Leaf()) + ": " + error);
 	}
 

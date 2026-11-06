@@ -19,8 +19,14 @@ filename pattern matching.
 - Ignore arbitrary filename text with `/*`
 - Read existing tags or create metadata when none exists
 - Set successfully updated files to the current `audio/mpeg` MIME type
-- Rename a single file as `Artist - Track Name.mp3`, optionally including the
-  track number as `Track Number - Artist - Track Name.mp3`
+- Rename a single file with a custom wildcard pattern
+
+The rename section provides presets for `{artist} - {title}.mp3`,
+`{track} - {artist} - {title}.mp3` and
+`{artist} - {track} - {title}.mp3`. Choose **Custom** to edit the pattern.
+Available wildcards are `{track}`, `{artist}`, `{title}`, `{album}` and
+`{year}`. **Rename File** updates the filename without closing the editor;
+only **Save** and **Cancel** close the window.
 
 The default pattern `/a - /t.mp3` reads filenames such as
 `Artist - Song title.mp3`.
@@ -57,11 +63,11 @@ Create an installable HPKG on Haiku:
 ./build-package.sh
 ```
 
-The output is `dist/mp3tag-1.2.0-1-<architecture>.hpkg`.
+The output is `dist/mp3tag-1.3.1-1-<architecture>.hpkg`.
 
 ## Version and copyright
 
-- Version: 1.2.0
+- Version: 1.3.1
 - Original author: Arvid Norberg
 - Copyright status: the original source did not include a software licence;
   see `COPYRIGHT` before redistributing it

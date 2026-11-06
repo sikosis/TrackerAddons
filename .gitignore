@@ -8,4 +8,5 @@ mp3tag/src/mp3tag
 mp3tag/src/objects.*
 mp3tag/tests/Id3v1TagTest
 mp3tag/tests/FileNameBuilderTest
+mp3tag/tests/GenresTest
 mp3tag/tests/PatternMatcherTest

@@ -28,29 +28,47 @@ int main()
 	data.title = "Heart Piece";
 	std::string filename;
 	std::string error;
-	Expect(BuildTagFileName(data, false, filename, error), "valid tags");
+	Expect(BuildTagFileName(data, kDefaultRenamePattern, filename, error),
+		"valid tags");
 	Expect(filename == "Harris Heller - Heart Piece.mp3", "expected filename");
 	data.track = 4;
-	Expect(BuildTagFileName(data, true, filename, error), "track number option");
+	Expect(BuildTagFileName(data, kTrackArtistTitlePattern,
+		filename, error), "track number pattern");
 	Expect(filename == "4 - Harris Heller - Heart Piece.mp3",
 		"filename with track number");
+	Expect(BuildTagFileName(data, kArtistTrackTitlePattern,
+		filename, error), "artist track title pattern");
+	Expect(filename == "Harris Heller - 4 - Heart Piece.mp3",
+		"artist track title filename");
 
 	data.artist = "  Artist/Name  ";
 	data.title = " Track\\Name ";
-	Expect(BuildTagFileName(data, false, filename, error), "sanitised tags");
+	Expect(BuildTagFileName(data, kDefaultRenamePattern, filename, error),
+		"sanitised tags");
 	Expect(filename == "Artist Name - Track Name.mp3", "sanitised filename");
 
 	data.artist.clear();
-	Expect(!BuildTagFileName(data, false, filename, error), "missing artist");
+	Expect(!BuildTagFileName(data, kDefaultRenamePattern, filename, error),
+		"missing artist");
 	data.artist = "Artist";
 	data.title.clear();
-	Expect(!BuildTagFileName(data, false, filename, error), "missing title");
+	Expect(!BuildTagFileName(data, kDefaultRenamePattern, filename, error),
+		"missing title");
 	data.title = "Title";
 	data.track = 0;
-	Expect(!BuildTagFileName(data, true, filename, error), "missing track number");
+	Expect(!BuildTagFileName(data, kTrackArtistTitlePattern,
+		filename, error), "missing track number");
+	Expect(!BuildTagFileName(data, "{unknown}", filename, error),
+		"unknown wildcard");
+	Expect(!BuildTagFileName(data, "{artist", filename, error),
+		"unmatched wildcard");
+	Expect(BuildTagFileName(data, "{artist} - {title}", filename, error),
+		"automatic extension");
+	Expect(filename == "Artist - Title.mp3", "extension appended");
 
 	data.title = std::string(250, 'x');
-	Expect(!BuildTagFileName(data, false, filename, error), "filename too long");
+	Expect(!BuildTagFileName(data, kDefaultRenamePattern, filename, error),
+		"filename too long");
 
 	std::cout << "All FileNameBuilder tests passed.\n";
 	return 0;

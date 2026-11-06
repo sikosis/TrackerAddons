@@ -3,6 +3,7 @@
 
 #include "TagData.h"
 
+#include <Path.h>
 #include <SupportDefs.h>
 
 #include <string>
@@ -22,8 +23,7 @@ struct BatchOptions {
 };
 
 
-bool EditSingleTag(const char* filename, TagData& data, bool& renameFile,
-	bool& includeTrackNumber);
+bool EditSingleTag(BPath& path, TagData& data);
 bool EditMultipleTags(BatchOptions& options);
 
 

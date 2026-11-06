@@ -6,7 +6,11 @@
 #include <string>
 
 
-bool BuildTagFileName(const TagData& data, bool includeTrackNumber,
+extern const char* const kDefaultRenamePattern;
+extern const char* const kTrackArtistTitlePattern;
+extern const char* const kArtistTrackTitlePattern;
+
+bool BuildTagFileName(const TagData& data, const std::string& pattern,
 	std::string& filename, std::string& error);
 
 
