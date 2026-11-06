@@ -52,11 +52,11 @@ Create an installable HPKG on Haiku:
 ./build-package.sh
 ```
 
-The output is `dist/mp3tag-1.0.0-1-<architecture>.hpkg`.
+The output is `dist/mp3tag-1.0.1-1-<architecture>.hpkg`.
 
 ## Version and copyright
 
-- Version: 1.0.0
+- Version: 1.0.1
 - Original author: Arvid Norberg
 - Copyright status: the original source did not include a software licence;
   see `COPYRIGHT` before redistributing it

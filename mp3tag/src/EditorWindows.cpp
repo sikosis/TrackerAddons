@@ -236,8 +236,8 @@ bool EditSingleTag(const char* filename, TagData& data)
 {
 	bool accepted = false;
 	SingleEditorWindow* window = new SingleEditorWindow(filename, &data, &accepted);
-	const thread_id thread = window->Thread();
 	window->Show();
+	const thread_id thread = window->Thread();
 	status_t result;
 	wait_for_thread(thread, &result);
 	return accepted;
@@ -249,8 +249,8 @@ bool EditMultipleTags(BatchOptions& options)
 {
 	bool accepted = false;
 	BatchEditorWindow* window = new BatchEditorWindow(&options, &accepted);
-	const thread_id thread = window->Thread();
 	window->Show();
+	const thread_id thread = window->Thread();
 	status_t result;
 	wait_for_thread(thread, &result);
 	return accepted;
