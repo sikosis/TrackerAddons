@@ -87,6 +87,7 @@ bool TagLibTag::Load(TagData& data, std::string& error)
 	data.album = ToUtf8(tag->album());
 	data.year = tag->year() == 0 ? std::string() : std::to_string(tag->year());
 	data.comment = ToUtf8(tag->comment());
+	// TagLib maps this value to the ID3v2.3/2.4 TRCK frame (TRK in ID3v2.2).
 	data.track = tag->track();
 	data.genre = GenreIndex(tag->genre());
 	return true;
@@ -108,6 +109,7 @@ bool TagLibTag::Save(const TagData& data, std::string& error)
 	tag->setAlbum(FromUtf8(data.album));
 	tag->setYear(ParseYear(data.year));
 	tag->setComment(FromUtf8(data.comment));
+	// Write the edited track number back to the MP3's ID3v2 TRCK frame.
 	tag->setTrack(data.track);
 	if (data.genre < kGenreCount)
 		tag->setGenre(FromUtf8(kGenreNames[data.genre]));

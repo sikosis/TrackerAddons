@@ -13,7 +13,8 @@ filename pattern matching.
 ## Features
 
 - Read and write both modern ID3v2 tags and legacy ID3v1 tags through TagLib
-- Edit title, artist, album, year, track number, comment and genre
+- Edit title, artist, album, year, track number, comment and genre. The track
+  number is read from and saved to the ID3v2 `TRCK` frame (`TRK` in ID3v2.2).
 - Apply selected fields to several MP3 files at once
 - Extract fields from filenames using `/a`, `/t`, `/n`, `/y` and `/c`
 - Ignore arbitrary filename text with `/*`
