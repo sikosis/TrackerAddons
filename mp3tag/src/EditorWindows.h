@@ -16,12 +16,14 @@ struct BatchOptions {
 	bool setAlbum = false;
 	bool setYear = false;
 	bool setComment = false;
+	bool setTrack = false;
 	bool setGenre = false;
 	TagData data;
 };
 
 
-bool EditSingleTag(const char* filename, TagData& data);
+bool EditSingleTag(const char* filename, TagData& data, bool& renameFile,
+	bool& includeTrackNumber);
 bool EditMultipleTags(BatchOptions& options);
 
 

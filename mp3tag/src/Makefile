@@ -10,8 +10,8 @@ ifeq ($(TAGLIB_CONFIG),)
 $(error TagLib development files are missing. Run: pkgman install taglib_devel)
 endif
 
-SRCS = main.cpp EditorWindows.cpp Genres.cpp Id3v1Tag.cpp PatternMatcher.cpp \
-	TagLibTag.cpp
+SRCS = main.cpp EditorWindows.cpp FileNameBuilder.cpp Genres.cpp Id3v1Tag.cpp \
+	PatternMatcher.cpp TagLibTag.cpp
 RDEFS = mp3tag.rdef
 RSRCS =
 

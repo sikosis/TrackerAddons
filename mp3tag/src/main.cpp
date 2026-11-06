@@ -4,6 +4,7 @@
  */
 
 #include "EditorWindows.h"
+#include "FileNameBuilder.h"
 #include "PatternMatcher.h"
 #include "TagLibTag.h"
 
@@ -84,6 +85,29 @@ bool SaveReference(const entry_ref& reference, const BPath& path,
 //---------------------------------------------------------------------------------------------------------------------------------//
 
 
+bool RenameReference(const entry_ref& reference, const TagData& data,
+	bool includeTrackNumber, std::string& error)
+{
+	std::string filename;
+	if (!BuildTagFileName(data, includeTrackNumber, filename, error))
+		return false;
+
+	BEntry entry(&reference, true);
+	if (entry.InitCheck() != B_OK) {
+		error = "Could not access the MP3 file for renaming.";
+		return false;
+	}
+	const status_t status = entry.Rename(filename.c_str(), false);
+	if (status != B_OK) {
+		error = "Could not rename the file (error "
+			+ std::to_string(status) + ").";
+		return false;
+	}
+	return true;
+}
+//---------------------------------------------------------------------------------------------------------------------------------//
+
+
 void ApplyPattern(const PatternResult& pattern, TagData& data)
 {
 	if (pattern.hasTitle)
@@ -112,6 +136,8 @@ void ApplyBatchFields(const BatchOptions& options, TagData& data)
 		data.year = options.data.year;
 	if (options.setComment)
 		data.comment = options.data.comment;
+	if (options.setTrack)
+		data.track = options.data.track;
 	if (options.setGenre)
 		data.genre = options.data.genre;
 }
@@ -148,10 +174,18 @@ extern "C" void process_refs(entry_ref directoryReference, BMessage* message,
 			ShowError(error);
 			return;
 		}
-		if (!EditSingleTag(path.Leaf(), data))
+		bool renameFile = false;
+		bool includeTrackNumber = false;
+		if (!EditSingleTag(path.Leaf(), data, renameFile, includeTrackNumber))
 			return;
-		if (!SaveReference(references[0], path, data, error))
+		if (!SaveReference(references[0], path, data, error)) {
 			ShowError(error);
+			return;
+		}
+		if (renameFile
+			&& !RenameReference(references[0], data, includeTrackNumber, error)) {
+			ShowError(error);
+		}
 		return;
 	}
 

@@ -4,10 +4,11 @@ CXXFLAGS += -std=c++17 -Wall -Wextra -Wpedantic
 
 PATTERN_TARGET = PatternMatcherTest
 TAG_TARGET = Id3v1TagTest
+FILENAME_TARGET = FileNameBuilderTest
 
 .PHONY: all clean test
 
-all: $(PATTERN_TARGET) $(TAG_TARGET)
+all: $(PATTERN_TARGET) $(TAG_TARGET) $(FILENAME_TARGET)
 
 $(PATTERN_TARGET): PatternMatcherTest.cpp ../src/PatternMatcher.cpp \
 	../src/PatternMatcher.h ../src/TagData.h
@@ -18,10 +19,16 @@ $(TAG_TARGET): Id3v1TagTest.cpp ../src/Id3v1Tag.cpp \
 	../src/Id3v1Tag.h ../src/TagData.h
 	$(CXX) $(CXXFLAGS) -I../src Id3v1TagTest.cpp ../src/Id3v1Tag.cpp -o $@
 
+$(FILENAME_TARGET): FileNameBuilderTest.cpp ../src/FileNameBuilder.cpp \
+	../src/FileNameBuilder.h ../src/TagData.h
+	$(CXX) $(CXXFLAGS) -I../src FileNameBuilderTest.cpp \
+		../src/FileNameBuilder.cpp -o $@
+
 test: all
 	./$(PATTERN_TARGET)
+	./$(FILENAME_TARGET)
 	temporary_file=$$(mktemp "$${TMPDIR:-/tmp}/mp3tag-test.XXXXXX"); \
 		./$(TAG_TARGET) "$$temporary_file"
 
 clean:
-	rm -f $(PATTERN_TARGET) $(TAG_TARGET)
+	rm -f $(PATTERN_TARGET) $(TAG_TARGET) $(FILENAME_TARGET)

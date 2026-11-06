@@ -13,12 +13,14 @@ filename pattern matching.
 ## Features
 
 - Read and write both modern ID3v2 tags and legacy ID3v1 tags through TagLib
-- Edit title, artist, album, year, comment and genre
+- Edit title, artist, album, year, track number, comment and genre
 - Apply selected fields to several MP3 files at once
 - Extract fields from filenames using `/a`, `/t`, `/n`, `/y` and `/c`
 - Ignore arbitrary filename text with `/*`
 - Read existing tags or create metadata when none exists
 - Set successfully updated files to the current `audio/mpeg` MIME type
+- Rename a single file as `Artist - Track Name.mp3`, optionally including the
+  track number as `Track Number - Artist - Track Name.mp3`
 
 The default pattern `/a - /t.mp3` reads filenames such as
 `Artist - Song title.mp3`.
@@ -55,11 +57,11 @@ Create an installable HPKG on Haiku:
 ./build-package.sh
 ```
 
-The output is `dist/mp3tag-1.1.0-1-<architecture>.hpkg`.
+The output is `dist/mp3tag-1.2.0-1-<architecture>.hpkg`.
 
 ## Version and copyright
 
-- Version: 1.1.0
+- Version: 1.2.0
 - Original author: Arvid Norberg
 - Copyright status: the original source did not include a software licence;
   see `COPYRIGHT` before redistributing it

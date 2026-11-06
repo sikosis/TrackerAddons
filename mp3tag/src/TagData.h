@@ -11,6 +11,7 @@ struct TagData {
 	std::string album;
 	std::string year;
 	std::string comment;
+	std::uint32_t track = 0;
 	std::uint8_t genre = 255;
 };
 
