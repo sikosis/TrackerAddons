@@ -4,6 +4,8 @@ resource app_flags B_SINGLE_LAUNCH;
 
 resource(101, "BEOS:ICON") #'VICN' import "mp3tag.hvif";
 
+resource(100, "BEOS:default_shortcut") "3";
+
 resource app_version {
 	major = 1,
 	middle = 3,

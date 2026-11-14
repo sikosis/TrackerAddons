@@ -10,3 +10,7 @@ mp3tag/tests/Id3v1TagTest
 mp3tag/tests/FileNameBuilderTest
 mp3tag/tests/GenresTest
 mp3tag/tests/PatternMatcherTest
+ImageMounter/dist/
+ImageMounter/src/ImageMounter
+ImageMounter/src/objects.*
+ImageMounter/tests/MountPointTest

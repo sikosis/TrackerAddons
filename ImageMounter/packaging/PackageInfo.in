@@ -1,0 +1,25 @@
+name imagemounter
+version @VERSION@-@REVISION@
+architecture @ARCHITECTURE@
+
+summary "Mount filesystem images from Tracker"
+description "ImageMounter is a Tracker add-on and drag-and-drop application for mounting BFS, HFS, ISO 9660 and FAT filesystem images read-only."
+vendor "ImageMounter contributors"
+packager "ImageMounter contributors"
+
+copyrights {
+	"2002 Maurice Michalski"
+	"2026 ImageMounter contributors"
+}
+
+licenses {
+	"MIT"
+}
+
+provides {
+	imagemounter = @VERSION@
+}
+
+requires {
+	haiku
+}

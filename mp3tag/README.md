@@ -55,7 +55,7 @@ make -C src install
 ```
 
 The add-on is installed as `MP3 Tag` in the current user's non-packaged
-Tracker add-ons directory.
+Tracker add-ons directory. Its Tracker shortcut is **Option+Alt+3**.
 
 ## Packaging
 
