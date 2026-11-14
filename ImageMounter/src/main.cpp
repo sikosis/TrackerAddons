@@ -21,7 +21,7 @@
 #include <View.h>
 #include <Window.h>
 #include <add-ons/tracker/TrackerAddOn.h>
-#include <fs_info.h>
+#include <fs_volume.h>
 #include <unistd.h>
 
 
@@ -29,7 +29,6 @@ namespace {
 
 
 const char* const kSignature = "application/x-vnd.ImageMounter";
-const uint32 kReadOnlyMount = 2;
 
 
 struct MountResult {
@@ -60,17 +59,16 @@ MountResult MountImage(const char* imagePath)
 				return result;
 			}
 
-			const dev_t device = mount(filesystem, mountPoint.c_str(), imagePath,
-				kReadOnlyMount, NULL, 0);
+			const dev_t device = fs_mount_volume(mountPoint.c_str(), imagePath,
+				filesystem, B_MOUNT_READ_ONLY | B_MOUNT_VIRTUAL_DEVICE, NULL);
 			if (device >= B_OK) {
 				result.mountPoint = mountPoint;
 				result.filesystem = filesystem;
 				result.status = B_OK;
 				return result;
 			}
-			const status_t mountError = device == -1 ? errno : device;
 			rmdir(mountPoint.c_str());
-			result.status = mountError;
+			result.status = device;
 			break;
 		}
 	}
